@@ -1,15 +1,7 @@
 class TimeFormat
   KNOWN_FORMATS = %w(year month day hour minute second)
 
-  def initialize(app)
-    @app = app
-  end
-
-  def call(env)
-    request = Rack::Request.new(env)
-    response = Rack::Response.new
-
-    status, headers, body = @app.call(env)
+  def call(request, response)
 
     return response.finish if request.params.empty?
 

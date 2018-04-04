@@ -1,5 +1,9 @@
+require_relative 'time_format'
+
 class App
   def call(env)
-    [200, { 'Content-Type' => 'text/plain' }, []]
+    request = Rack::Request.new(env)
+    response = Rack::Response.new
+    TimeFormat.new.call(request, response)
   end
 end
