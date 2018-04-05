@@ -1,37 +1,21 @@
 class TimeFormat
   KNOWN_FORMATS = %w(year month day hour minute second)
 
-  def call(request, response)
-
-    return response.finish if request.params.empty?
-
-    if unknown_format(request).empty?
-      response.write "#{convert_params(request)}\n"
-    else
-      response.status = 400
-      response.write "Unknown time format [#{unknown_format(request)}]\n"
-    end
-
-    response.finish
-  end
-
-  private
-
-  def unknown_format(request)
+  def unknown_format(format)
     not_include_params = []
 
-    request.params["format"].split(',').each do |param|
+    format.split(',').each do |param|
       not_include_params << param unless KNOWN_FORMATS.include?(param)
     end
 
     not_include_params.join(',')
   end
 
-  def convert_params(request)
+  def convert_params(format)
     formatted_params = []
     time = Time.now
 
-    request.params["format"].split(',').each do |param|
+    format.split(',').each do |param|
       case param
       when 'year'
         formatted_params << time.strftime('%Y')
@@ -51,4 +35,3 @@ class TimeFormat
     formatted_params.join('-')
   end
 end
-
